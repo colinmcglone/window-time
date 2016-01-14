@@ -23,3 +23,11 @@ class MovingAvg(models.Model):
     span = models.IntegerField()
     def __str__(self):
         return self.ticker
+
+class Movement(models.Model):
+    ticker = models.CharField(max_length=10)
+    date = models.DateField(editable=True, auto_now_add=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    series = models.CharField(max_length=10)
+    def __str__(self):
+        return self.ticker
