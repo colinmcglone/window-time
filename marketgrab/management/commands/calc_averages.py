@@ -27,6 +27,8 @@ class Command(BaseCommand):
 
                 if latest_average < latest_data:
                     delta = Data.objects.filter(ticker=e, date__range=(latest_average, latest_data)).count()
+                    ts = datetime.datetime.now()
+                    tt = datetime.timedelta(seconds=0)
 
                     while i < delta:
                         oldest = delta
@@ -40,6 +42,13 @@ class Command(BaseCommand):
                         n = MovingAvg(ticker=e, date=avg_set[0].date, price=x, span=i)
                         n.save()
                         delta = delta - 1
-                        self.stdout.write(self.style.SUCCESS('%s %s day average for %s updated!' % (e, i, avg_set[0].date)))
+
+                        td = datetime.datetime.now() - ts
+                        tt = tt + td
+                        ts = datetime.datetime.now()
+
+                        if not delta % 100:
+                            self.stdout.write(self.style.SUCCESS('%s %s day average for %s updated! %s' % (e, i, avg_set[0].date, tt.total_seconds())))
+                            tt = datetime.timedelta(seconds=0)
                 else:
                     self.stdout.write(self.style.SUCCESS('No averages to update.'))
