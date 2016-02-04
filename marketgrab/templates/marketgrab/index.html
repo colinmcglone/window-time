@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <p>If you are looking at this page you are probably worried about the stock market, don't be. It's dumb. <a href='fivethirtyeight.com/datalab/when-to-pay-attention-to-the-stock-market-and-when-to-ignore-it/'>Trust this guy</a>. He is much smarter than me.</p>
+        <br />
+        <p>As it turns out humans are very good at constructing narritives to explain purely statistical (ie. non causal) events. That's why it feels so much better to hear that the market is going down because traders are 'profit taking' and not that the market is <a href='simple.wikipedia.org/wiki/regression_toward_the_mean'>regressing to the mean</a>.<p>
+        <p>Enjoy some numbers and graphs!</p>
+        {% for t in ticker %} {# these should already be sorted #}
+        <div>
+            <img src='{{ t }}_movement_distribution.png' />
+            <div>
+                <p>Movement (%): {{ t.move }}</p>
+                <p>Significance: {{ t.sig }}</p>
+            </div>
+            <div>
+                <p>Moving Averages:</p>
+                {% for s in [3 , 5, 50, 200] %}
+                    <p>{{ s }} Day Moving Average: {{ t.avg }}</p>
+                    <p>{{ s }} Day Moving Average Change (%): {{ t.avg }}</p>
+                    <p>Change Significance: {{ t.avg }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </body>
+</html>

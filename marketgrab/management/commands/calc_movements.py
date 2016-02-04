@@ -34,8 +34,9 @@ class Command(BaseCommand):
                         prev = data[delta-1:delta]
                         curr = data[delta:delta+1]
                         diff = curr[0].aclose_price - prev[0].aclose_price
+                        percent = (diff/curr[0].aclose_price)*100
 
-                        movement = Movements(ticker=t, date=curr[0].date, price=diff, series='market')
+                        movement = Movements(ticker=t, date=curr[0].date, price=diff, percent_move=percent, series='market')
                         movement.save()
 
                         if not delta % 100:
@@ -68,8 +69,9 @@ class Command(BaseCommand):
                                 prev = data[delta-1:delta]
                                 curr = data[delta:delta+1]
                                 diff = curr[0].price - prev[0].price
+                                percent = (diff/curr[0].price)*100
 
-                                movement = Movements(ticker=t, date=curr[0].date, price=diff, series=s)
+                                movement = Movements(ticker=t, date=curr[0].date, price=diff, percent_move=percent, series=s)
                                 movement.save()
 
                                 if not delta % 100:
