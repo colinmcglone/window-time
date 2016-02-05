@@ -31,8 +31,8 @@ class Command(BaseCommand):
                     data = Data.objects.filter(ticker=t).order_by('-date')
                     length = len(data)
                     while delta > 0:
-                        prev = data[delta-1:delta]
-                        curr = data[delta:delta+1]
+                        curr = data[delta-1:delta]
+                        prev = data[delta:delta+1]
                         diff = curr[0].aclose_price - prev[0].aclose_price
                         percent = (diff/curr[0].aclose_price)*100
 
@@ -66,8 +66,8 @@ class Command(BaseCommand):
                             data = MovingAvg.objects.filter(span=s, ticker=t).order_by('-date')
                             length = len(data)
                             while delta > 0:
-                                prev = data[delta-1:delta]
-                                curr = data[delta:delta+1]
+                                curr = data[delta-1:delta]
+                                prev = data[delta:delta+1]
                                 diff = curr[0].price - prev[0].price
                                 percent = (diff/curr[0].price)*100
 
