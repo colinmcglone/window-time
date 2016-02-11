@@ -24,10 +24,20 @@ class Command(BaseCommand):
                 d = move.latest('date').date
                 s = Sigma(ticker=t, date=d, value=sigma, series='market')
                 s.save()
-
+                
+                movement = move.latest('date')
+                zscore = (movement.percent - move.aggregate(avg = Avg('percent'))['avg'])/sigma
+                movement.zvalue = zscore
+                movement.save()
+                
                 for s in [3, 5, 50, 200]:
                     move = Movements.objects.filter(ticker=t, series=s)
                     sigma = np.std(np.array([i.percent for i in move]))
                     d = move.latest('date').date
                     s = Sigma(ticker=t, date=d, value=sigma, series=s)
                     s.save()
+                    
+                    movement = move.latest('date')
+                    zscore = (movement.percent - move.aggregate(avg = Avg('percent'))['avg'])/sigma
+                    movement.zvalue = zscore
+                    movement.save()

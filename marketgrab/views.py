@@ -16,16 +16,17 @@ def index(request):
         index = index[0]
         market = Data.objects.filter(ticker=index).latest('date')
         move = Movements.objects.filter(ticker=index, series='market').latest('date')
-        sig = Significance.objects.filter(ticker=index, series='market').latest('date')
+        sig = Sigma.objects.filter(ticker=index, series='market').latest('date')
 
         avgs = MovingAvg.objects.filter(ticker=index).values_list('span').distinct()
         spans = []
         for span in avgs:
-            avgmove = Movements.objects.filter(ticker=index, series=span),latest('date')
-            avgsig = Significance.objects.filter(ticker=index, series=span).latest('date')
-            spans.extend[span, avgmove.price, avgmove.percent, avgsig.value]
+            span = span[0]
+            avgmove = Movements.objects.filter(ticker=index, series=span).latest('date')
+            avgsig = Sigma.objects.filter(ticker=index, series=span).latest('date')
+            spans.extend([span, avgmove.price, avgmove.percent, avgsig.value])
 
-        markets.extend([index, market.price, market.date, move.price, move.percent, sig.value, spans])
+        markets.extend([index, market.aclose_price, market.date, move.price, move.percent, sig.value, spans])
 
         return HttpResponse("%s" % markets)
 
