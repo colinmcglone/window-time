@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^(?P<t>[A-Za-z]+)/$', views.detail),
+    url(r'^analysis/graphs/$', views.graphs),
+    url(r'^ticker/(?P<t>[A-Za-z]+)/$', views.detail),
 ]

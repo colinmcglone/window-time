@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        {% load staticfiles %}
+        {% for i in images %}
+            <img src="{% static i %}" /><br />
+        {% endfor %}
+    </body>
+</html>
