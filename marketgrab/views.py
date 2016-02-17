@@ -21,6 +21,17 @@ def index(request):
         move_percent = Movements.objects.filter(ticker=t, series='market').latest('date').percent
 
         spans = MovingAvg.objects.values_list('span').distinct()
+
+        i = {
+            'index':t,
+            'price':price,
+            'date':date,
+            'move_price':move_price,
+            'move_percent':move_percent
+            }
+
+        market.append(i)
+
         for s in spans:
             s = s[0]
 
@@ -35,18 +46,8 @@ def index(request):
                 'percent':avg_percent,
                 'zscore':zscore
                 }
+            (item for item in market if item['index']==t).next()['avgs'] = a
 
-            averages.append(a)
-
-        i = {
-            'index':t,
-            'price':price,
-            'date':date,
-            'move_price':move_price,
-            'move_percent':move_percent
-            }
-
-        market.append(i)
 
     context = RequestContext(request, {'market':market, 'averages':averages})
 
