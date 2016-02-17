@@ -46,7 +46,8 @@ def index(request):
                 'percent':avg_percent,
                 'zscore':zscore
                 }
-            (item for item in market if item['index']==t).next()['avgs'] = a
+
+            (item for item in market if item['index']==t).next()[str(s) + '_avg'] = a
 
 
     context = RequestContext(request, {'market':market, 'averages':averages})
