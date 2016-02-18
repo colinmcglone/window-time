@@ -10,7 +10,6 @@ def index(request):
 
     ticker = Data.objects.values_list('ticker').distinct()
     market = []
-    averages = []
     for t in ticker:
         t = t[0]
 
@@ -19,7 +18,7 @@ def index(request):
 
         move_price = Movements.objects.filter(ticker=t, series='market').latest('date').price
         move_percent = Movements.objects.filter(ticker=t, series='market').latest('date').percent
-
+        move_zscore = Movements.objects.filter(ticker=t, series='market').latest('date').zvalue
         spans = MovingAvg.objects.values_list('span').distinct()
 
         i = {
@@ -27,7 +26,9 @@ def index(request):
             'price':price,
             'date':date,
             'move_price':move_price,
-            'move_percent':move_percent
+            'move_percent':round(move_percent, 4),
+            'move_zscore':round(move_zscore, 4),
+            'hist':'marketgrab/'+t+'_hist.png'
             }
 
         market.append(i)
@@ -43,14 +44,14 @@ def index(request):
                 'ticker':t,
                 'span':s,
                 'price':avg_price,
-                'percent':avg_percent,
-                'zscore':zscore
+                'percent':round(avg_percent, 4),
+                'zscore':round(zscore, 4)
                 }
 
             (item for item in market if item['index']==t).next()[str(s) + '_avg'] = a
 
 
-    context = RequestContext(request, {'market':market, 'averages':averages})
+    context = RequestContext(request, {'market':market})
 
     return render_to_response('marketgrab/index.html', context_instance = context)
 

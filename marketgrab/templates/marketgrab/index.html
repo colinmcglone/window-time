@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <p>If you are looking at this page you are probably worried about the stock market, don't be. It's dumb. <a href='fivethirtyeight.com/datalab/when-to-pay-attention-to-the-stock-market-and-when-to-ignore-it/'>Trust this guy</a>. He is much smarter than me.</p>
-        <br />
-        <p>As it turns out humans are very good at constructing narritives to explain purely statistical (ie. non causal) events. That's why it feels so much better to hear that the market is going down because traders are 'profit taking' than the market is <a href='simple.wikipedia.org/wiki/regression_toward_the_mean'>regressing to the mean</a>.<p>
-        <p>Enjoy some numbers and graphs!</p>
+        <div id="blurp">
+            <p>If you are looking at this page you are probably worried about the stock market, don't be. It's dumb. <a href='fivethirtyeight.com/datalab/when-to-pay-attention-to-the-stock-market-and-when-to-ignore-it/'>Trust this guy</a>. He is much smarter than me.</p>
+            <p>As it turns out humans are very good at constructing narritives to explain purely statistical (ie. non causal) events. That's why it feels so much better to hear that the market is going down because traders are 'profit taking' than the market is <a href='simple.wikipedia.org/wiki/regression_toward_the_mean'>regressing to the mean</a>.<p>
+            <p>Enjoy some numbers and graphs!</p>
+        </div>
+        <div id="overview">
+            {% load staticfiles %}
+            {% for t in market %}
+            <div class="index">
+                <h3 class="ticker">{{ t.index }}</h3>
+                <span class="move">${{ t.move_price }}</span><span class="percent">{{ t.move_percent }}%</span>
+                <span class="zscore">{{ t.move_zscore }}&sigma;</span>
+                <img src="{% static t.hist %}" alt="" class="hist" />
+            </div>
+            {% endfor %}
+        </div>
+
+=====================================
         {% for t in market %} {# these should already be sorted #}
-            <div>t
+            <div class="index">
             {% for key, value in t.items %}
-                <p>i {{ key }} : {{ value }}</p>
+                {% if value.items > 1 %}
+                <div class="averages">
+                    <h3>{{ key }}</h3>
+                    {% for k, v in value.items %}
+                        <p>{{ k }} : {{ v }}</p>
+                    {% endfor %}
+                </div>
+                {% else %}
+                    <p>{{ key }} : {{ value }}</p>
+                {% endif %}
             {% endfor %}
             </div>
         {% endfor %}
