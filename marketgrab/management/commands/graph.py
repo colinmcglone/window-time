@@ -23,6 +23,7 @@ class Command(BaseCommand):
             plt.xlabel('Year')
             plt.ylabel('Price $')
             plt.title('Price History')
+            plt.figure(num=None, figsize=(8, 4))
             plt.plot(x, y)
             plt.savefig('../public/static/marketgrab/' + t + '_data.png')
             plt.close()
@@ -30,11 +31,11 @@ class Command(BaseCommand):
 
             move = Movements.objects.filter(ticker=t, series='market')
             count = move.count()
-            x = np.array([i.percent_move for i in move])
+            x = np.array([i.percent for i in move])
             mu = Movements.objects.filter(ticker=t, series='market').aggregate(mean=Avg('percent'))['mean']
             min = Movements.objects.filter(ticker=t, series='market').aggregate(min=Min('percent'))['min']
             max = Movements.objects.filter(ticker=t, series='market').aggregate(max=Max('percent'))['max']
-            sigma = np.std(np.array([i.percent_move for i in move]))
+            sigma = np.std(np.array([i.percent for i in move]))
             b = [min]
             b.extend(np.arange(-5, 5, 0.1))
             b.extend([max])
@@ -49,8 +50,13 @@ class Command(BaseCommand):
             plt.axis([-5.5, 5.5, 0, 550])
             plt.title('Histogram of Daily Movements in %s \n Max: %s, Min: %s, Mean: %s, Standard Deviation:%s' % (t, round(max, 1), round(min, 1), round(mu, 4), round(sigma, 4)))
             plt.grid(True)
-
+            plt.axvline(mu, color='b', linestyle='dashed', linewidth='1', label='Mean')
+            plt.axvline(-sigma, color='r', linestyle='dashed', linewidth='1', label='minus sigma')
+            plt.axvline(sigma, color='r', linestyle='dashed', linewidth='1', label='plus sigma')
+            plt.figure(num=None, figsize=(1.5, 1.5))
             plt.savefig('../public/static/marketgrab/' + t + '_hist.png')
+            plt.figure(num=None, figsize=(8, 4))
+            plt.savefig('../public/static/marketgrab/' + t + '_hist_big.png')
             plt.close()
 
             for s in [3, 5, 50, 200]:
@@ -60,6 +66,7 @@ class Command(BaseCommand):
                 plt.xlabel('Year')
                 plt.ylabel('Price $')
                 plt.title('Price History')
+                plt.figure(num=None, figsize=(8, 4))
                 plt.plot(x, y)
                 plt.savefig('../public/static/marketgrab/' + t + '_' + str(s) + '_movingavg.png')
                 plt.close()
