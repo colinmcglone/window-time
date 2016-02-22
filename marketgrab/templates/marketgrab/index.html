@@ -2,7 +2,7 @@
 <html>
 {% load staticfiles %}
     <head>
-	<script src="{% static chart.js/Chart.min.js %}"></script>
+	<script src="{% static %}/Chart.min.js"></script>
 	<script>
 	    var ctx = getElementById("DJI_hist").getContext("2d");
 	    var myNewChart = new Chart(ctx).Line(data);
