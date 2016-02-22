@@ -1,5 +1,38 @@
 <!DOCTYPE html>
 <html>
+{% load staticfiles %}
+    <head>
+	<script src="{% static chart.js/Chart.min.js %}"></script>
+	<script>
+	    var ctx = getElementById("DJI_hist").getContext("2d");
+	    var myNewChart = new Chart(ctx).Line(data);
+	    var data = {
+	    labels: ["January", "February", "March", "April", "May", "June", "July"],
+	    datasets: [
+		{
+		    label: "My First dataset",
+		    fillColor: "rgba(220,220,220,0.2)",
+		    strokeColor: "rgba(220,220,220,1)",
+		    pointColor: "rgba(220,220,220,1)",
+		    pointStrokeColor: "#fff",
+		    pointHighlightFill: "#fff",
+		    pointHighlightStroke: "rgba(220,220,220,1)",
+		    data: [65, 59, 80, 81, 56, 55, 40]
+		},
+		{
+		    label: "My Second dataset",
+		    fillColor: "rgba(151,187,205,0.2)",
+		    strokeColor: "rgba(151,187,205,1)",
+		    pointColor: "rgba(151,187,205,1)",
+		    pointStrokeColor: "#fff",
+		    pointHighlightFill: "#fff",
+		    pointHighlightStroke: "rgba(151,187,205,1)",
+		    data: [28, 48, 40, 19, 86, 27, 90]
+		}
+	    ]
+	    };
+    </head>
+
     <body>
         <div id="blurp">
             <p>If you are looking at this page you are probably worried about the stock market, don't be. It's dumb. <a href='fivethirtyeight.com/datalab/when-to-pay-attention-to-the-stock-market-and-when-to-ignore-it/'>Trust this guy</a>. He is much smarter than me.</p>
@@ -7,13 +40,12 @@
             <p>Enjoy some numbers and graphs!</p>
         </div>
         <div id="overview">
-            {% load staticfiles %}
             {% for t in market %}
             <div class="index">
                 <h3 class="ticker">{{ t.index }}</h3>
                 <span class="move">${{ t.move_price }}</span><span class="percent">{{ t.move_percent }}%</span>
                 <span class="zscore">{{ t.move_zscore }}&sigma;</span>
-                <img src="{% static t.hist %}" alt="" class="hist" />
+                <canvas class="{{ t.index }}_hist" width="200px" height="200px"></canvas>
             </div>
             {% endfor %}
         </div>
