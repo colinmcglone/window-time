@@ -45,7 +45,8 @@
                 <h3 class="ticker">{{ t.index }}</h3>
                 <span class="move">${{ t.move_price }}</span><span class="percent">{{ t.move_percent }}%</span>
                 <span class="zscore">{{ t.move_zscore }}&sigma;</span>
-                <canvas id="{{ t.index }}_hist" width="300px" height="100px"></canvas>
+                <img source="{% static t.index %}_hist.png" alt="t.index percent move histogram" />
+                <canvas id="{{ t.index }}_hist_broken" width="300px" height="100px"></canvas>
             </div>
             {% endfor %}
         </div>
